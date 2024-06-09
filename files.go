@@ -147,6 +147,25 @@ func (c *Client) ListFiles(ctx context.Context) (files FilesList, err error) {
 	return
 }
 
+// ListFilesForIDs Lists the files based on provided IDs.
+// WARNING: This is an undocumented API, used by the OpenAI platform UI. Consider it a hack.
+func (c *Client) ListFilesForIDs(ctx context.Context, fileIDs []string) (files FilesList, err error) {
+	req, err := c.newRequest(ctx, http.MethodGet, c.fullURL("/files"))
+	if err != nil {
+		return
+	}
+
+	reqQuery := req.URL.Query()
+	for _, id := range fileIDs {
+		reqQuery.Add("ids[]", id)
+	}
+
+	req.URL.RawQuery = reqQuery.Encode()
+
+	err = c.sendRequest(req, &files)
+	return
+}
+
 // GetFile Retrieves a file instance, providing basic information about the file
 // such as the file name and purpose.
 func (c *Client) GetFile(ctx context.Context, fileID string) (file File, err error) {
