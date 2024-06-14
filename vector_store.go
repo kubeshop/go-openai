@@ -84,6 +84,10 @@ type VectorStoreFileRequest struct {
 type VectorStoreFilesList struct {
 	VectorStoreFiles []VectorStoreFile `json:"data"`
 
+	FirstID string `json:"first_id"`
+	LastID  string `json:"last_id"`
+	HasMore bool   `json:"has_more"`
+
 	httpHeader
 }
 
